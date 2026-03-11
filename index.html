@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中集體勞動權益冒險 - 團結力量大</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="particles-container"></div>
+    
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <header>
+        <h1>
+            <span class="title-main"><i class="fa-solid fa-people-group"></i> 高中集體勞動權益冒險</span>
+            <span class="title-sub"><i class="fa-solid fa-flag"></i> 團結力量大</span>
+        </h1>
+        <div id="game-stats" style="display: flex; gap: 20px; font-size: 0.9rem; color: var(--text-muted); align-items: center;">
+            <div><i class="fa-solid fa-book-open" style="margin-right: 5px;"></i> 章節: <span id="chapter-title" style="color: var(--primary); font-weight: 700;">載入中...</span></div>
+            <div style="display: flex; gap: 10px;">
+                <button id="reset-btn" onclick="resetProgress()" class="icon-toggle-btn" title="清除進度並重新開始" style="color: var(--warning);">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button id="sound-btn" onclick="toggleSound()" class="icon-toggle-btn" title="開/關音效與音樂">
+                    <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="game-container">
+        <div class="game-content-wrapper">
+            <div class="scenario-card" id="scenario-card">
+                <div id="character-info" style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;">
+                    <div id="char-avatar" class="avatar-container">
+                        <i id="avatar-icon" class="fa-solid fa-user-secret"></i>
+                    </div>
+                    <div>
+                        <div id="char-name" style="font-weight: 800; font-size: 1.2rem; color: var(--text-main); letter-spacing: 0.5px;">???</div>
+                        <div id="char-role" style="font-size: 0.85rem; color: var(--primary); opacity: 0.8; font-weight: 500;">神秘人</div>
+                    </div>
+                </div>
+                
+                <div id="dialog-text" class="dialog-text">載入中...</div>
+                <div id="options-container" class="options-container"></div>
+            </div>
+        </div>
+
+        <aside id="knowledge-inventory">
+            <div id="mascot-speech-container" style="background: rgba(15, 23, 42, 0.6); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--primary); margin-bottom: 2rem; box-shadow: inset 0 0 10px var(--primary-glow);">
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.8rem; color: var(--accent-neon); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-lightbulb"></i> 勞權小提醒
+                </h3>
+                <div id="mascot-speech" style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6; font-weight: 500;">點擊選項來回答問題吧！</div>
+            </div>
+            <h3 style="font-size: 1.1rem; margin-bottom: 1.5rem; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-handshake-angle"></i> 團結防身包
+            </h3>
+            <ul id="inventory-list">
+                <!-- 知識點將動態生成 -->
+            </ul>
+        </aside>
+        </div>
+    </main>
+
+    <div id="cert-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 style="color: var(--primary); margin-bottom: 1rem;"><i class="fa-solid fa-award"></i> 領取結業證書</h3>
+            <p style="margin-bottom: 1rem; color: var(--text-main);">請輸入您的姓名，我們將為您合成專屬的結業證書：</p>
+            <input type="text" id="cert-name-input" placeholder="勞權小尖兵" style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.5); border: 1px solid var(--primary); border-radius: 8px; color: white; font-size: 1rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button id="cert-cancel-btn" class="option-btn" style="padding: 0.8rem 1.5rem; flex-direction: row; gap: 0;">取消</button>
+                <button id="cert-confirm-btn" class="option-btn" style="padding: 0.8rem 1.5rem; border-color: var(--warning); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); flex-direction: row; gap: 0;">確認下載</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 600px; text-align: center;">
+            <h3 style="color: var(--accent-neon); margin-bottom: 1.5rem; font-size: 1.5rem;"><i class="fa-solid fa-layer-group"></i> 勞動權益總複習</h3>
+            
+            <div id="review-card" style="background: rgba(15, 23, 42, 0.8); border: 2px solid var(--primary); gap: 1rem; padding: 2rem; border-radius: 16px; min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 0 20px rgba(255, 0, 255, 0.2); margin-bottom: 1.5rem; transition: transform 0.3s ease;">
+                <div id="review-card-title" style="color: var(--primary); font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem;">知識點</div>
+                <div id="review-card-content" style="color: var(--text-main); font-size: 1.1rem; line-height: 1.6;">內容載入中...</div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <button id="review-prev-btn" class="icon-toggle-btn" style="width: 50px; height: 50px;"><i class="fa-solid fa-chevron-left"></i></button>
+                <div id="review-counter" style="color: var(--text-muted); font-weight: bold;">1 / 10</div>
+                <button id="review-next-btn" class="icon-toggle-btn" style="width: 50px; height: 50px;"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            
+            <button id="review-close-btn" class="option-btn" style="width: 100%; justify-content: center;">完成複習</button>
+        </div>
+    </div>
+
+    <div id="mascot-container" title="拖曳我！(提示: 按 1, 2 選項，空白鍵/點擊 快轉對話)">
+        <img id="mascot-image" src="image/LiyuChillGuy.svg" alt="LiyuChill Mascot" onerror="this.src='https://raw.githubusercontent.com/liyuchiutiger/karaoke-shen/main/image/LiyuChillGuy.svg'">
+    </div>
+
+    <footer style="line-height: 1.8;">
+        參考資料：<i class="fa-solid fa-book"></i> 新北市高中職勞動權益課程教材<br>
+        Copyright &copy; Liyuchiutiger Gongminshen
+    </footer>
+
+    <script src="game.js"></script>
+</body>
+</html>
