@@ -659,7 +659,7 @@ function doGenerateCertificate(userName) {
     ctx.textAlign = 'center';
     ctx.shadowColor = '#ff00ff';
     ctx.shadowBlur = 20;
-    ctx.fillText('高中集體勞動權益冒險結業證書', canvas.width / 2, 120);
+    ctx.fillText('高中集體勞動權益結業證書', canvas.width / 2, 120);
     ctx.shadowBlur = 0; // 重置陰影
 
     // 內文
